@@ -26,7 +26,7 @@
 		<export resource="r../Results.csv" interval="DT" precomputed="false" isee:format="numbers">
 			<all/>
 		</export>
-		<import isee:overwrite="true" resource="r../Parms.csv"/>
+		<import frequency="on_demand" isee:overwrite="true" resource="r../Parms.csv"/>
 	</data>
 	<model_units>
 		<unit name="Dimensionless">
@@ -176,7 +176,7 @@ Converter_1</eqn>
 				<isee:iframe color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt" border_width="thin" border_style="solid"/>
 				<isee:financial_table color="black" background="white" text_align="right" font_size="12pt" hide_border="false" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="false" background="white" isee:name_only_modules="true" page_width="590" page_height="770" isee:page_cols="3" isee:page_rows="2" isee:scroll_y="313.333" zoom="120" isee:popup_graphs_are_comparative="true" isee:enable_non_negative_highlights="false" type="stock_flow">
+			<view isee:show_pages="false" background="white" isee:name_only_modules="true" page_width="590" page_height="770" isee:page_cols="3" isee:page_rows="2" isee:scroll_x="2" isee:scroll_y="91" isee:popup_graphs_are_comparative="true" isee:enable_non_negative_highlights="false" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="black" background="white" font_size="12pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
@@ -274,11 +274,11 @@ Converter_1</eqn>
 					</graph>
 				</stacked_container>
 				<aux label_side="top" x="401.667" y="211.667" name="Initial Population"/>
-				<module x="68.3376" y="632.563" width="122" height="26" name="IP1 Crude Birth Rate"/>
-				<aux color="black" label_angle="116.923" x="164.023" y="242.98" name="Initial Max Crude\nBirth Rate"/>
+				<module x="47.8532" y="604.059" width="122" height="26" name="IP1 Crude Birth Rate"/>
+				<aux color="black" label_angle="116.923" x="190.75" y="229.667" name="Initial Max Crude\nBirth Rate"/>
 				<aux color="black" label_side="right" x="599.688" y="219.877" name="Initial\nMortality\nRate"/>
 				<aux x="411.667" y="524.951" name="Initial Carrying\nCapacity"/>
-				<connector uid="13" angle="337.783">
+				<connector uid="13" angle="319.868">
 					<from>Initial_Max_Crude_Birth_Rate</from>
 					<to>Max_Crude_Birth_Rate</to>
 				</connector>
@@ -286,7 +286,7 @@ Converter_1</eqn>
 					<from>Initial_Carrying_Capacity</from>
 					<to>Carrying_Capacity</to>
 				</connector>
-				<aux font_style="italic" font_weight="bold" label_side="right" x="267.48" y="645.563" name="Converter 1"/>
+				<aux font_style="italic" font_weight="bold" label_side="right" x="246.995" y="617.059" name="Converter 1"/>
 				<connector uid="15" angle="0">
 					<from>IP1_Crude_Birth_Rate</from>
 					<to>Converter_1</to>
@@ -301,8 +301,8 @@ Converter_1</eqn>
 					<from>Initial_Mortality_Rate</from>
 					<to>Mortality_Rate</to>
 				</connector>
-				<module x="81.013" y="676.463" width="106" height="26" name="IP2 Mortality Rate"/>
-				<aux font_style="italic" font_weight="bold" label_side="right" x="267.48" y="689.463" name="Converter 2"/>
+				<module x="60.5286" y="647.959" width="106" height="26" name="IP2 Mortality Rate"/>
+				<aux font_style="italic" font_weight="bold" label_side="right" x="246.995" y="660.959" name="Converter 2"/>
 				<connector uid="19" angle="0">
 					<from>IP2_Mortality_Rate</from>
 					<to>Converter_2</to>
@@ -313,8 +313,8 @@ Converter_1</eqn>
 					</from>
 					<to>Mortality_Rate</to>
 				</connector>
-				<module x="60.2285" y="716.382" width="128" height="26" name="IP3 Carrying Capacity"/>
-				<aux font_style="italic" font_weight="bold" label_side="right" x="267.48" y="729.382" name="Converter 3"/>
+				<module x="39.7441" y="687.878" width="128" height="26" name="IP3 Carrying Capacity"/>
+				<aux font_style="italic" font_weight="bold" label_side="right" x="246.995" y="700.878" name="Converter 3"/>
 				<connector uid="22" angle="0">
 					<from>IP3_Carrying_Capacity</from>
 					<to>Converter_3</to>
@@ -325,8 +325,8 @@ Converter_1</eqn>
 					</from>
 					<to>Carrying_Capacity</to>
 				</connector>
-				<module x="56.2285" y="755.957" width="136" height="42" name="IP4 Effect of Population Size on Births"/>
-				<aux font_style="italic" font_weight="bold" label_side="right" x="267.48" y="776.957" name="Converter 4"/>
+				<module x="35.7441" y="727.453" width="136" height="42" name="IP4 Effect of Population Size on Births"/>
+				<aux font_style="italic" font_weight="bold" label_side="right" x="246.995" y="748.453" name="Converter 4"/>
 				<connector uid="25" angle="359.481">
 					<from>IP4_Effect_of_Population_Size_on_Births</from>
 					<to>Converter_4</to>
@@ -365,7 +365,7 @@ Converter_1</eqn>
 				<units>Dimensionless</units>
 			</aux>
 			<aux name="T1">
-				<eqn>STARTTIME + 0.5*(STOPTIME - STARTTIME)</eqn>
+				<eqn>50</eqn>
 				<units>Years</units>
 			</aux>
 			<aux name="Intervention\nPoint" access="output">
@@ -495,7 +495,7 @@ ELSE
 				<units>Dimensionless</units>
 			</aux>
 			<aux name="T1">
-				<eqn>STARTTIME + 0.5*(STOPTIME - STARTTIME)</eqn>
+				<eqn>50</eqn>
 				<units>Years</units>
 			</aux>
 			<aux name="Intervention\nPoint" access="output">
@@ -625,7 +625,7 @@ ELSE
 				<units>Dimensionless</units>
 			</aux>
 			<aux name="T1">
-				<eqn>STARTTIME + 0.5*(STOPTIME - STARTTIME)</eqn>
+				<eqn>50</eqn>
 				<units>Years</units>
 			</aux>
 			<aux name="Intervention\nPoint" access="output">
@@ -755,7 +755,7 @@ ELSE
 				<units>Dimensionless</units>
 			</aux>
 			<aux name="T1">
-				<eqn>STARTTIME + 0.5*(STOPTIME - STARTTIME)</eqn>
+				<eqn>50</eqn>
 				<units>Years</units>
 			</aux>
 			<aux name="Intervention\nPoint" access="output">
