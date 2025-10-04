@@ -81,7 +81,7 @@ It is important that this file be saved in the same directory as the model. Alth
 
 **Figure 4.** Setting up the link for the Parms.csv import file
 
-![](images/clipboard-3063195959.png)
+![](images/clipboard-3063195959.png){width=50%}
 
 After setting the Parms.csv file, a dynamic link for exporting results needs to be set up. Set the dynamic link to the Results.csv file in the same directory of the model. There is a choice to set the sheet orientation to vertical or horizontal. Select the vertical orientation as this conforms best to importing data as a data frame as shown in Figure 5. Other options include exporting all the variables and whether to export at every time step. For small models, this does not matter, but for larger models, exporting all the variables at every time step creates *very large* Results.csv files. Options to reduce the file size include saving results at a wider set of intervals and/or only exporting the variables of interest.
 
