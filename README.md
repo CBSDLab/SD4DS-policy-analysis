@@ -12,7 +12,7 @@ This set of exercises provides an introduction to designing and running a policy
 There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
 
 | File | Description |
-|----------------------|-------------------------------------------------|
+|-----------------------|-------------------------------------------------|
 | \<model\>.stmx | This is the Stella model with intervention points for the policy analysis |
 | study.csv | This is a file describing all the scenarios to run for a policy analysis. The first row contains the list of variables that will set for each each scenario. It is important that the variable names in this first row have an exact match to the variables in the Stella model, otherwise, they will be ingored. The remaining rows define the values for each scenario. |
 | Parms.csv | This is a file defining the values to use for the current scenario being simulated. The file can be empty when the file is initially created, but must be set up in the Stella model with a dynamic link for importing values. Contents of the Parms.csv file will be overwritten for each simulation. |
@@ -98,7 +98,7 @@ It is important that this file be saved in the same directory as the model. Alth
 
 **Figure 4.** Setting up the link for the Parms.csv import file
 
-![](images/clipboard-3063195959.png){width="50%"}
+![](images/clipboard-2703054577.png)
 
 After setting the Parms.csv file, a dynamic link for exporting results needs to be set up. Set the dynamic link to the Results.csv file in the same directory of the model. There is a choice to set the sheet orientation to vertical or horizontal. Select the vertical orientation as this conforms best to importing data as a data frame as shown in Figure 5. Other options include exporting all the variables and whether to export at every time step. For small models, this does not matter, but for larger models, exporting all the variables at every time step creates *very large* Results.csv files. Options to reduce the file size include saving results at a wider set of intervals and/or only exporting the variables of interest.
 
@@ -261,7 +261,12 @@ This SLURM script will request the resources, which be allocated and start start
 -   A typo in one or more the file names you provided in the SLURM script.
 -   One or more files are not available in the working directory.
 -   Resources are not available, e.g., the R/4.1.2-foss-2021b module needed to call the R script for processing results is no longer available on the HPC.
--   
+
+The study1_results.csv can be downloaded and opened in Excel (see Figure 7). It's a large file with every variable for every time step for each of the scenarios with more than 512,000 rows or 80 MB of data and this is for a small model! For larger models or more extensive simulation studies, combining all of the results in this way within the "process_results.R" script might not work as R has a limited amount of working memory that is requested and allocated when the job is submitted and not all the variables would be needed for the analysis and plotting. Hence it is likely that one will want to customize the "process_results.R" script for each simulation study.
+
+Figure 7. Excel view of "study1_results.csv" file
+
+![](images/clipboard-298308424.png)
 
 ## 1.5. Summarizing and visualizing results
 
