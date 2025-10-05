@@ -90,7 +90,7 @@ The results from pulling all of this together for the "Limits to Growth" model a
 
 ![](images/clipboard-1626355863.png)
 
-## 1.2. Setting up .csv files for dynamic links with model
+### 1.2. Setting up .csv files for dynamic links with model
 
 Once the model has been set up with potential intervention points, we'll need to set up some .csv files for exchanging parameters and simulated results along with the dynamic links in our model. This can be an empty file, but what is critical is that the dynamic import link be set up in the model. An easy way to do this is simply use the Parms.csv file in this example.
 
@@ -106,7 +106,7 @@ After setting the Parms.csv file, a dynamic link for exporting results needs to 
 
 ![](images/clipboard-846751442.png)
 
-## 1.3. Setting up the study design and study.csv file
+### 1.3. Setting up the study design and study.csv file
 
 Once the basic dynamic links have been set up for importing and exporting data, we need to set up the study.csv file. This is the file that essentially defines the simulation study for our policy analysis, i.e., the parameter values and switches/timings of policies we want to turn on and off. If we have multiple studies, each study should have be uniquely named, e.g., Study1.csv, Study2.csv, etc. or Univariate_study.csv, Multivariate_study.csv, etc.
 
@@ -167,7 +167,7 @@ These steps are summarized in the Create_study1.R script. Once we have created t
 
 ![](images/clipboard-2640277478.png)
 
-## 1.4. Running the simulation study
+### 1.4. Running the simulation study
 
 Now we are *almost* ready to run the simulation. The "simulate_study_template.sh" script has several elements that need to be modified for each simulation study, hence it is a good practice to copy the template script and give it a name unique to each study, e.g., "simulate_study1.sh". Below is the overall script that will need to be modified.
 
@@ -268,7 +268,7 @@ The study1_results.csv can be downloaded and opened in Excel (see Figure 7). It'
 
 ![](images/clipboard-298308424.png)
 
-## 1.5. Analysis and visualizing results
+### 1.5. Analysis and visualizing results
 
 Although one could in principle include code for analyzing and visualizing the results from a policy analysis in a customized version of the post simulation processing script (e.g., "process_results.R"), it is best to keep the generation of the simulation results and subsequent analysis and visualization in separate scripts. For example, figuring out how one wants to analyze and visualize the simulation results usually benefits from an interactive session and can be done on a local computer or laptop after downloading the results. And, one does not want to have to rerun the simulations just to see how a modification in the visualization looks.
 
