@@ -10,7 +10,7 @@
 #SBATCH -o serial-R.out%j # capture jobid in output file name
 
 # run simulation study using AWK script
-awk -f simulate_study.awk -v MODEL="limits to growth v2.stmx" "study1.csv""
+awk -f simulate_scenarios.awk -v MODEL="limits to growth v2.stmx" "study1.csv"
 
 # load R module to process results
 module load R/4.1.2-foss-2021b

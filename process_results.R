@@ -2,7 +2,7 @@
 # and process them into the desired format
 #
 # Created by: Peter S. Hovmand April 20, 2025
-# Revised by: 
+# Revised by: Peter S. Hovmand October 5, 2025 to include all variables
 
 library(fs)
 library(readr)
@@ -23,8 +23,7 @@ for (i in 1:length(results_list)) {
   
   # Process the data for simulation run i
   tmp_df <- data.frame(Run = i,
-                       Year = tmp$Years,
-                       Pop = tmp$Population)
+                       tmp)
   # Append the processed data for simulation run i to the processed_results
   processed_results <- rbind(processed_results, tmp_df)
 }

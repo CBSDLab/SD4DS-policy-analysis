@@ -261,6 +261,7 @@ This SLURM script will request the resources, which be allocated and start start
 -   A typo in one or more the file names you provided in the SLURM script.
 -   One or more files are not available in the working directory.
 -   Resources are not available, e.g., the R/4.1.2-foss-2021b module needed to call the R script for processing results is no longer available on the HPC.
+-   
 
 ## 1.5. Summarizing and visualizing results
 
