@@ -12,7 +12,7 @@ This set of exercises provides an introduction to designing and running a policy
 There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
 
 | File | Description |
-|---------------------|---------------------------------------------------|
+|----|----|
 | \<model\>.stmx | This is the Stella model with intervention points for the policy analysis |
 | study.csv | This is a file describing all the scenarios to run for a policy analysis. The first row contains the list of variables that will set for each each scenario. It is important that the variable names in this first row have an exact match to the variables in the Stella model, otherwise, they will be ingored. The remaining rows define the values for each scenario. |
 | Parms.csv | This is a file defining the values to use for the current scenario being simulated. The file can be empty when the file is initially created, but must be set up in the Stella model with a dynamic link for importing values. Contents of the Parms.csv file will be overwritten for each simulation. |
@@ -35,7 +35,7 @@ This exercise walks through the details of setting up and running a policy analy
 
 To get and run these examples, log into the HPC, start a terminal, change to the SD4DS director, and clone the SD4DS-policy-analysis repository:
 
-```
+```         
 cd SD4DS
 git clone https://github.com/CBSDLab/SD4DS-policy-analysis.git
 ```
