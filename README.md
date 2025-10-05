@@ -12,7 +12,7 @@ This set of exercises provides an introduction to designing and running a policy
 There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
 
 | File | Description |
-|-------------------|-----------------------------------------------------|
+|---------------------|---------------------------------------------------|
 | \<model\>.stmx | This is the Stella model with intervention points for the policy analysis |
 | study.csv | This is a file describing all the scenarios to run for a policy analysis. The first row contains the list of variables that will set for each each scenario. It is important that the variable names in this first row have an exact match to the variables in the Stella model, otherwise, they will be ingored. The remaining rows define the values for each scenario. |
 | Parms.csv | This is a file defining the values to use for the current scenario being simulated. The file can be empty when the file is initially created, but must be set up in the Stella model with a dynamic link for importing values. Contents of the Parms.csv file will be overwritten for each simulation. |
@@ -23,7 +23,24 @@ There are many ways to implement a policy analysis on the HPC including running 
 
 : **Table 1**, Common files needed for running a policy analysis and their description
 
-## 1. Modifying a model to conduct a policy analysis
+The following exercises walk through the steps to set up and run a policy analysis, beginning with a detailed example for setting up a model and running a univariate policy analysis, and then move onto examples that illustrate different types of policy analyses.
+
+Defining the policy outcome(s) of interest is a key step in conducting a policy analysis. Since simulation models make all values available for all the variables, there are a lot more options than available in the real world giving one the opportunity to explore different ways defining a policy outcome. For example, one could define an outcome of interest by simply maximizing (or minimizing) the value of some variable at the end of a simulation run, but other options include defining the improvement of some variable relative to the present time, defining outcomes as a ratio of two variables, the cumulative value as opposed to the final value, or some other set of multivariate outcome measures. One is really only constrained by the variables in a model and one's imagination.
+
+However, for the purpose of the examples that follow, we're going to keep it simple and assume that the goal is to maximize the population of a system by 100 years. That is, we are ultimately interested in identifying the set of policies that will maximize the final population in our model under the assumed initial conditions and parameter values in the model.
+
+## 1. Setting up and running a policy analysis
+
+This exercise walks through the details of setting up and running a policy analysis. To get an initial sense of the influence of individual policies on the dynamics of a system and outcomes, a good first step is simply to test what they impact of turning on an intervention is on the policy outcome(s) of interest. So we'll set this up and run a univariate policy analysis where we simply turn policies on and off at the default time of 50 years, which is midway in the "Limits to Growth.stmx" time horizon.
+
+To get and run these examples, log into the HPC, start a terminal, change to the SD4DS director, and clone the SD4DS-policy-analysis repository:
+
+```
+cd SD4DS
+git clone https://github.com/CBSDLab/SD4DS-policy-analysis.git
+```
+
+### 1.1 Modifying a model to conduct a policy analysis
 
 When we conduct a policy analysis, we generally want to know how a specific policy might change the dynamics of the system. A common mistake is to change the parameter values of a model as a proxy for a policy experiement. Doing this is problematic because one is essentially starting the model in a different scenario as opposed to intervening in a scenario. Moreover, one will usually want to be able to test both the strength of the policy intervention (i.e., effect sizes) *and* the timing of the intervention.
 
@@ -73,7 +90,7 @@ The results from pulling all of this together for the "Limits to Growth" model a
 
 ![](images/clipboard-1626355863.png)
 
-## 2. Setting up .csv files for dynamic links with model
+## 1.2. Setting up .csv files for dynamic links with model
 
 Once the model has been set up with potential intervention points, we'll need to set up some .csv files for exchanging parameters and simulated results along with the dynamic links in our model. This can be an empty file, but what is critical is that the dynamic import link be set up in the model. An easy way to do this is simply use the Parms.csv file in this example.
 
@@ -81,7 +98,7 @@ It is important that this file be saved in the same directory as the model. Alth
 
 **Figure 4.** Setting up the link for the Parms.csv import file
 
-![](images/clipboard-3063195959.png){width=50%}
+![](images/clipboard-3063195959.png){width="50%"}
 
 After setting the Parms.csv file, a dynamic link for exporting results needs to be set up. Set the dynamic link to the Results.csv file in the same directory of the model. There is a choice to set the sheet orientation to vertical or horizontal. Select the vertical orientation as this conforms best to importing data as a data frame as shown in Figure 5. Other options include exporting all the variables and whether to export at every time step. For small models, this does not matter, but for larger models, exporting all the variables at every time step creates *very large* Results.csv files. Options to reduce the file size include saving results at a wider set of intervals and/or only exporting the variables of interest.
 
@@ -89,31 +106,74 @@ After setting the Parms.csv file, a dynamic link for exporting results needs to 
 
 ![](images/clipboard-846751442.png)
 
-## 3. Setting up the study design and study.csv file
+## 1.3. Setting up the study design and study.csv file
 
-Once the basic dynamic links have been set up for importing and exporting data, one needs to set up the study design and study.csv file. The study.csv file should be uniquely named for each study (e.g., "Study 1.csv", "Study 2.csv", etc.).
+Once the basic dynamic links have been set up for importing and exporting data, we need to set up the study.csv file. This is the file that essentially defines the simulation study for our policy analysis, i.e., the parameter values and switches/timings of policies we want to turn on and off. If we have multiple studies, each study should have be uniquely named, e.g., Study1.csv, Study2.csv, etc. or Univariate_study.csv, Multivariate_study.csv, etc.
 
 The simulate_study.awk script uses the first row or header row of the study.csv file to identify the variable names for the simulation study, and it is ***critical*** that these match the variable names in the Stella model ***exactly*** because Stella will otherwise ignore the variables. The best way to ensure that the variable names are the same is create an import template in Stella by clicking the "Make Template" in the Model Imports form (Figure 4). Select the column (vertical) organization of variables, which generates a header row of all the variables in a model (Figure 6). This will create a Template.csv file that can be edited.
 
-**Figure 6.** Setting up the link to the Results.csv export file
+**Figure 6.** Creating a template for importing variables
 
 ![](images/clipboard-300742457.png){width="493"}
 
-Remove the variables (columns) that won't be used in the policy analysis and then set the values for each scenario. This can be done by editing the file, e.g., in Excel or Google Sheets, or writing a script that generates the desired set of scenarios.
+One can remove the variables (columns) that won't be used in the policy analysis and then set the values for each scenario. This can be done by editing the file, e.g., in Excel or Google Sheets, or writing a script that generates the desired set of scenarios. This makes it easier to see and manage the variabless defining the policy scenario.
 
-Note that it is important to look and edit file carefully as this defines the variables that will be used to set up the simulation study. For example, if one used the "Intervention Point.stmx" structure to set up the intervention points, the structure assumes that T1 of the intervention is at a value of 50. However, if the stop time of the simulation is less than 50, the intervention will never be activated even when the switch is on.
+Note that it is important to look and edit file carefully as this defines the variables that will be used to set up the simulation study. For example, if one used the "Intervention Point.stmx" structure to set up the intervention points, the structure assumes that T1 of the intervention is at a value of 50. However, if the stop time of the simulation is less than 50, the intervention will never be activated even when the switch is on. This is not a problem for the "Limits to Growth" model because the time horizon ranges from 0 to 100 years, so a value of 50 years is midway through the simulation run.
 
-```         
-inline code that can be copied and pasted
+Although one can set up the Study.csv file manually, beyond a few rows to simulate, it quickly becomes tedious and error prone. A better way to do this is to write and run a short script that reads in the template, generates a data frame defining the simulation study, and then creates the desired Study.csv file.
+
+We start by reading in the Template.csv file into R.
+
+```{r read Template}
+library(readr)
+Template <- read_csv("Template.csv")
 ```
 
-## 4. Running the simulation study
+We then create the study1_df data frame to store our result and get a vector that identifies the switches in our model. Note that it's helpful to follow a convention in using prefixes or suffixes for switches, effect sizes, etc., that makes this step easy without having write out lists of variables.
+
+```{r create study1_df data frame}
+# Create the study1_df
+study1_df <- Template
+
+# Find the columns with the policy switches
+SW_vec <- grep("SW", names(Template))
+```
+
+From here, we loop through the switches by going through each index value that we identified as a switch, turn the switch on, and add the vector to the study1_df we are creating.
+
+```{r loop through switches}
+for (sw in SW_vec) {
+  # create a temporary row from the first row of the base simulation
+  tmp <- study1_df[1,]  
+  
+  # set the switch to 1 (on)
+  tmp[,sw] <- 1
+  
+  # add the row to the simulation study data frame
+  study1_df <- rbind(study1_df,tmp)
+}
+```
+
+The last step is writing the Study1.csv files with our results.
+
+```{r write csv file}
+# write the results to the Study1.csv
+write_csv(study1_df,"Study1.csv")
+```
+
+These steps are summarized in the Create_study1.R script. Once we have created the Study1.csv file, we should be able to view and see the results where one can see each row has a different switch activated (see Figure 6). We are now ready to run the simulation model.
+
+**Figure 6.** Resulting Study1.csv file as viewed in Excel
+
+![](images/clipboard-2640277478.png)
+
+## 1.4. Running the simulation study
 
 ```         
 inline code that can be copied and pasted 
 ```
 
-## 5. Summarizing and visualizing results
+## 1.55. Summarizing and visualizing results
 
 # On your own
 
