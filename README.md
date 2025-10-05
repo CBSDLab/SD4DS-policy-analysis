@@ -12,7 +12,7 @@ This set of exercises provides an introduction to designing and running a policy
 There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
 
 | File | Description |
-|-----------------------|-------------------------------------------------|
+|-----------------------|------------------------------------------------|
 | \<model\>.stmx | This is the Stella model with intervention points for the policy analysis |
 | study.csv | This is a file describing all the scenarios to run for a policy analysis. The first row contains the list of variables that will set for each each scenario. It is important that the variable names in this first row have an exact match to the variables in the Stella model, otherwise, they will be ingored. The remaining rows define the values for each scenario. |
 | Parms.csv | This is a file defining the values to use for the current scenario being simulated. The file can be empty when the file is initially created, but must be set up in the Stella model with a dynamic link for importing values. Contents of the Parms.csv file will be overwritten for each simulation. |
@@ -264,20 +264,50 @@ This SLURM script will request the resources, which be allocated and start start
 
 The study1_results.csv can be downloaded and opened in Excel (see Figure 7). It's a large file with every variable for every time step for each of the scenarios with more than 512,000 rows or 80 MB of data and this is for a small model! For larger models or more extensive simulation studies, combining all of the results in this way within the "process_results.R" script might not work as R has a limited amount of working memory that is requested and allocated when the job is submitted and not all the variables would be needed for the analysis and plotting. Hence it is likely that one will want to customize the "process_results.R" script for each simulation study.
 
-Figure 7. Excel view of "study1_results.csv" file
+**Figure 7.** Excel view of "study1_results.csv" file
 
 ![](images/clipboard-298308424.png)
 
-## 1.5. Summarizing and visualizing results
+## 1.5. Analysis and visualizing results
 
-# On your own
+Although one could in principle include code for analyzing and visualizing the results from a policy analysis in a customized version of the post simulation processing script (e.g., "process_results.R"), it is best to keep the generation of the simulation results and subsequent analysis and visualization in separate scripts. For example, figuring out how one wants to analyze and visualize the simulation results usually benefits from an interactive session and can be done on a local computer or laptop after downloading the results. And, one does not want to have to rerun the simulations just to see how a modification in the visualization looks.
 
-things that can be done beyond the exercise
+The "analyze_study1.R" example shown below imports the "study1_results.csv" file, runs a few checks, and then generates a plot showing which policy had the highest final population at 100 years. Note that each scenario represents a combination of policy switches being turned on an off. In this case, we don't necessarily want all the specific values, just the scenario being simulated. The code below constructs a variable \`Scenario\` that represents which switches were turned on (1) or off (0) as a string representing SW1-SW2-SW3-SW4. Nothing special about this specific strategy for naming scenarios, and there are many ways to assign more meaningful names to a policy scenario.
 
-# Some things to note
+```         
+# import results
+library(readr)
+library(tidyverse)
+study1_results <- read_csv("study1_results.csv")
 
-comments/notes
+# get the policy switch variables
+vars <- names(study1_results)
+SW_vec <- grep("SW", vars)
 
-# References
+# check time horizon
+range(study1_results$Years)
+ftable(study1_results[study1_results$Years==100,SW_vec])
 
-any references
+# create a vector to summarize the policy switches that are on
+scenario <- apply(study1_results[,vars[SW_vec]],1, paste0, collapse="-")
+
+# select the final population for comparisons against policy 
+# scenarios
+study1_results %>%
+  mutate(Scenario = scenario) %>%
+  filter(Years == 100) %>%
+  mutate(`Final Population` = Population) %>%
+  select(Scenario, `Final Population`) -> tmp
+
+# plot the results from the policy analysis
+barplot(tmp$`Final Population`,names = tmp$Scenario,
+        xlab = "Scenario (SW1-SW2-SW3-SW4)",
+        ylab = "Population(100)", 
+        main = "Results from policy analysis study1.csv")
+```
+
+Running this code should generate the following plot of results from the policy analysis defined in study 1.
+
+**Figure 8.** Plot of results summarizing policy analysis in study 1.
+
+![](images/clipboard-3220571465.png)
