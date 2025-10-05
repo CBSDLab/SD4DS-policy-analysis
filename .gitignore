@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+.isdb
+study_results.RData
