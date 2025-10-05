@@ -8,7 +8,7 @@
 		<product version="4.0" isee:build_number="3710" isee:saved_by_v1="true" lang="en">Stella Architect</product>
 	</header>
 	<ai_information>
-		<status verified="true" trusted="true" tampered="false" uses="false" analyzed="false" log_truncated="false" timestamp="1759419112" algorithm="ed25519" keyurl="https://iseesystems.com/keys/stella01.txt" want_var_info="true" want_var_status="false" want_log="false" sampling="1" signature="fRi//Sh325lYLbzNRsdL5h7YXosE7OV3Stsw7bfaQ4GcQY3O0mSrV+v/6dWbVTCE/k35oLcIzSl0G86337HtAw=="/>
+		<status verified="true" trusted="true" tampered="false" uses="false" analyzed="false" log_truncated="false" timestamp="1759539381" algorithm="ed25519" keyurl="https://iseesystems.com/keys/stella01.txt" want_var_info="true" want_var_status="false" want_log="false" sampling="1" signature="pmG7omMKQZS91VWOtzX65vzEvcxwBXxkWa5eNtgHoIcpnhoKjLrLErQjob42k33Ac0RqOk7+OjMFaJAO7ZcsAQ=="/>
 	</ai_information>
 	<sim_specs isee:sim_duration="1.5" isee:run_prefix="Run" isee:simulation_delay="0.125" isee:restore_on_start="false" method="Euler" time_units="Months" isee:instantaneous_flows="false" isee:ignore_module_errors="false" isee:strict_units="true" isee:loop_scores="true" isee:loop_exhaustive_allowed="1000">
 		<start>1</start>
@@ -49,14 +49,14 @@
 				<units>Dimensionless</units>
 			</aux>
 			<aux name="T1">
-				<eqn>STARTTIME + 0.5*(STOPTIME - STARTTIME)</eqn>
+				<eqn>50</eqn>
 				<units>Years</units>
 			</aux>
 			<aux name="Intervention\nPoint" access="output">
 				<eqn>IF SW = 1 AND TIME &gt;= T1 THEN
   1 + STEP(ES, T1)
 ELSE
-  0</eqn>
+  1</eqn>
 				<units>Dimensionless</units>
 			</aux>
 		</variables>
