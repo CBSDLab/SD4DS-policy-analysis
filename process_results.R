@@ -30,7 +30,7 @@ for (i in 1:length(results_list)) {
 }
 
 # Save the processed results
-save(processed_results, file = "study_results.RData")
+write_csv(processed_results, file = "study_results.csv")
 
 # Clean up the drive by deleting the individual simulation study results
 file_delete(results_list)
