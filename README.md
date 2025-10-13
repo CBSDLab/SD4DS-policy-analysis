@@ -3,7 +3,7 @@
 This set of exercises provides an introduction to designing and running a policy analysis on the High Performance Computing (HPC) cluster using Stella Simulator. Although these can be set up and run with standard software packages (e.g., Stella Architect, Vensim) through the user interface, there are advantages of setting and running a policy analysis as a script on the HPC, especially for models with larger sets of potential intervention points and parameter space where one might want to conduct a sensitivity analysis of selected policies, including:
 
 -   Transparency of simulation study including generation of values for parameters and initial conditions.
--   Replicability of studies when code is made advailable to reviewers and other researchers even if they do not have access to the commercial software.
+-   Replicability of studies when code is made available to reviewers and other researchers even if they do not have access to the commercial software.
 -   Reproducibility of results by being able to re-run the analyses through scripts.
 -   Efficiency of resources since long simulation runs can be initiated as a batch process on the HPC versus tying up a local computer.
 
@@ -11,14 +11,23 @@ This set of exercises provides an introduction to designing and running a policy
 
 There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
 
-|     |
-|-----|
-
 The following exercises walk through the steps to set up and run a policy analysis, beginning with a detailed example for setting up a model and running a univariate policy analysis, and then move onto examples that illustrate different types of policy analyses.
 
 Defining the policy outcome(s) of interest is a key step in conducting a policy analysis. Since simulation models make all values available for all the variables, there are a lot more options than available in the real world giving one the opportunity to explore different ways defining a policy outcome. For example, one could define an outcome of interest by simply maximizing (or minimizing) the value of some variable at the end of a simulation run, but other options include defining the improvement of some variable relative to the present time, defining outcomes as a ratio of two variables, the cumulative value as opposed to the final value, or some other set of multivariate outcome measures. One is really only constrained by the variables in a model and one's imagination.
 
 However, for the purpose of the examples that follow, we're going to keep it simple and assume that the goal is to maximize the population of a system by 100 years. That is, we are ultimately interested in identifying the set of policies that will maximize the final population in our model under the assumed initial conditions and parameter values in the model.
+
+There are seven steps to setting up and running a policy analysis on the HPC:
+
+1.  Get the files that are needed to run the simulations, which include files that define the studies and some scripts for running the simulations.
+2.  Modify the Stella model to include switches representing the policies that will be turned on and off.
+3.  Creating the dynamic links in the Stella model to import values for each scenario and to export results.
+4.  Setting up the study design with the study.csv file where each row represents a scenario to be simulated along with the initial values and parameters.
+5.  Modifying the Bash script for the [Slurm workload manager](https://en.wikipedia.org/wiki/Slurm_Workload_Manager) which is used to request and allocate the resources on the HPC.
+6.  Running the simulation by submitting the Bash script as a batch job.
+7.  Analyzing the results once the simulation is complete.
+
+After the first time of setting up a model for a policy analysis and relevant files, most of the work will focus on steps 4 and 7 with minor changes to the Bash script for each study.
 
 ## 1. Getting files for exercise from GitHub
 
@@ -32,7 +41,7 @@ cd SD4DS-policy-analysis
 ```
 
 | File | Description |
-|------------------------|------------------------------------------------|
+|--------------------------|----------------------------------------------|
 | \<model\>.stmx | This is the Stella model with intervention points for the policy analysis |
 | study.csv | This is a file describing all the scenarios to run for a policy analysis. The first row contains the list of variables that will set for each each scenario. It is important that the variable names in this first row have an exact match to the variables in the Stella model, otherwise, they will be ingored. The remaining rows define the values for each scenario. |
 | Parms.csv | This is a file defining the values to use for the current scenario being simulated. The file can be empty when the file is initially created, but must be set up in the Stella model with a dynamic link for importing values. Contents of the Parms.csv file will be overwritten for each simulation. |
@@ -43,7 +52,7 @@ cd SD4DS-policy-analysis
 
 : **Table 1**, Common files needed for running a policy analysis and their description
 
-### 2. Modifying a model to conduct a policy analysis
+## 2. Modifying a model to conduct a policy analysis
 
 When we conduct a policy analysis, we generally want to know how a specific policy might change the dynamics of the system. A common mistake is to change the parameter values of a model as a proxy for a policy experiement. Doing this is problematic because one is essentially starting the model in a different scenario as opposed to intervening in a scenario. Moreover, one will usually want to be able to test both the strength of the policy intervention (i.e., effect sizes) *and* the timing of the intervention.
 
@@ -170,9 +179,9 @@ These steps are summarized in the Create_study1.R script. Once we have created t
 
 ![](images/clipboard-2640277478.png)
 
-## 5. Running the simulation study
+## 5. Modifying the Bash script
 
-Now we are *almost* ready to run the simulation. The "simulate_study_template.sh" script has several elements that need to be modified for each simulation study, hence it is a good practice to copy the template script and give it a name unique to each study, e.g., "simulate_study1.sh". Below is the overall script that will need to be modified.
+Now we are *almost* ready to run the simulation. The "simulate_study_template.sh" Bash script has several elements that need to be modified for each simulation study, hence it is a good practice to copy the template script and give it a name unique to each study, e.g., "simulate_study1.sh". Below is the overall script that will need to be modified.
 
 ```         
 #!/bin/bash
@@ -252,6 +261,8 @@ Rscript process_results.R
 cp study_results.csv study1_results.csv
 ```
 
+## 6. Running the simulation study
+
 Now we're ready to submit our job to the HPC using the following terminal command:
 
 ```         
@@ -271,7 +282,7 @@ The study1_results.csv can be downloaded and opened in Excel (see Figure 7). It'
 
 ![](images/clipboard-298308424.png)
 
-## 6. Analysis and visualizing results
+## 7. Analyzing and visualizing results
 
 Although one could in principle include code for analyzing and visualizing the results from a policy analysis in a customized version of the post simulation processing script (e.g., "process_results.R"), it is best to keep the generation of the simulation results and subsequent analysis and visualization in separate scripts. For example, figuring out how one wants to analyze and visualize the simulation results usually benefits from an interactive session and can be done on a local computer or laptop after downloading the results. And, one does not want to have to rerun the simulations just to see how a modification in the visualization looks.
 
@@ -314,3 +325,9 @@ Running this code should generate the following plot of results from the policy 
 **Figure 8.** Plot of results summarizing policy analysis in study 1.
 
 ![](images/clipboard-3220571465.png)
+
+## Next steps and future directions
+
+This exercise runs a simple univariate policy analysis where we turned only one policy on at a time. Variations of this might include exploring whether the timing of policy makes a difference and adding a feature to the switches that allows for the policy to be de-implemented, which is an emerging area of interest in implementation science. The next set of exercises will focus on testing combinations of policies.
+
+For this exercise, future development includes improving the Bash script template to make use of variables instead of having to type the study name several times, and automating the use of the scratch drive to temporarily store the results from simulations.
