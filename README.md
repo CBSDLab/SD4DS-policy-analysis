@@ -1,23 +1,19 @@
 # Policy Analysis
 
-This set of exercises from [SD4DS](https://github.com/CBSDLab/SD4DS) provides an introduction to designing and running a policy analysis on the High Performance Computing (HPC) cluster using Stella Simulator. Although these can be set up and run with standard software packages (e.g., Stella Architect, Vensim) through the user interface, there are advantages of setting and running a policy analysis as a script on the HPC, especially for models with larger sets of potential intervention points and parameter space where one might want to conduct a sensitivity analysis of selected policies, including:
+This set of exercises from [SD4DS](https://github.com/CBSDLab/SD4DS) provides an introduction to designing and running a policy analysis on the High Performance Computing (HPC) cluster using Stella Simulator. Conducting a policy analysis allows a modeler to test different intervention places in the model and compare their impact on the desired outcome. This exercise will walk through building the intervention model structure in a Stella model, running the simulation, and comparing the interventions as a graph plot in R. 
 
--   Transparency of simulation study including generation of values for parameters and initial conditions.
--   Replicability of studies when code is made available to reviewers and other researchers even if they do not have access to the commercial software.
--   Reproducibility of results by being able to re-run the analyses through scripts.
--   Efficiency of resources since long simulation runs can be initiated as a batch process on the HPC versus tying up a local computer.
+For more details on why we're doing this on the HPC as opposed to standard software pacakages (e.g. Stella Architect, Vensim) through the user interface, as well as the rationale for the coding languages chosen in this exercise, please read the Deep Dive section at the end of this exercise.
+
 
 ## Overview
 
-There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. Table 1 provides an overview of files needed for conducting a policy analysis.
+To implement a policy analysis on the HPC, we present an approach that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. For more details on this approach, please read the Deep Dive section at the end of this exercise. 
 
-The following exercises walk through the steps to set up and run a policy analysis, beginning with a detailed example for setting up a model and running a univariate policy analysis, and then move onto examples that illustrate different types of policy analyses.
+Defining the policy outcome(s) of interest is a key step in conducting a policy analysis. All variables' values are available in simulation models, so there are a lot more options for outcomes in a simulation study than available in the real world. This means we have the opportunity to explore many different ways defining a policy outcome in a simulation study. For example, one could define an outcome of interest by simply maximizing (or minimizing) the value of some variable at the end of a simulation run, but other options include defining the improvement of some variable relative to the present time, defining outcomes as a ratio of two variables, the cumulative value as opposed to the final value, or some other set of multivariate outcome measures. One is really only constrained by the variables in a model and one's imagination.
 
-Defining the policy outcome(s) of interest is a key step in conducting a policy analysis. Since simulation models make all values available for all the variables, there are a lot more options than available in the real world giving one the opportunity to explore different ways defining a policy outcome. For example, one could define an outcome of interest by simply maximizing (or minimizing) the value of some variable at the end of a simulation run, but other options include defining the improvement of some variable relative to the present time, defining outcomes as a ratio of two variables, the cumulative value as opposed to the final value, or some other set of multivariate outcome measures. One is really only constrained by the variables in a model and one's imagination.
+For the purpose of this example, we're going to keep it simple and assume that the goal is to maximize the population of a system by 100 years. That is, we are ultimately interested in identifying the set of policies that will maximize the final population in our model (under the assumed initial conditions and parameter values in the model).
 
-However, for the purpose of the examples that follow, we're going to keep it simple and assume that the goal is to maximize the population of a system by 100 years. That is, we are ultimately interested in identifying the set of policies that will maximize the final population in our model under the assumed initial conditions and parameter values in the model.
-
-There are seven steps to setting up and running a policy analysis on the HPC:
+The following exercise walks through the seven steps to set up and run a policy analysis (below), beginning with a detailed example for setting up a model and running a univariate policy analysis, and then move onto examples that illustrate different types of policy analyses. Table 1 provides an overview of files needed for conducting a policy analysis.
 
 1.  Get the files that are needed to run the simulations, which include files that define the studies and some scripts for running the simulations.
 2.  Modify the Stella model to include switches representing the policies that will be turned on and off.
@@ -332,3 +328,13 @@ Running this code should generate the following plot of results from the policy 
 This exercise runs a simple univariate policy analysis where we turned only one policy on at a time. Variations of this might include exploring whether the timing of policy makes a difference and adding a feature to the switches that allows for the policy to be de-implemented, which is an emerging area of interest in implementation science. The next set of exercises will focus on testing combinations of policies.
 
 For this exercise, future development includes improving the Bash script template to make use of variables instead of having to type the study name several times, and automating the use of the scratch drive to temporarily store the results from simulations.
+
+## Deep Dive
+Although these can be set up and run with standard software packages (e.g., Stella Architect, Vensim) through the user interface, there are advantages of setting and running a policy analysis as a script on the HPC, especially for models with larger sets of potential intervention points and parameter space where one might want to conduct a sensitivity analysis of selected policies, including:
+
+-   Transparency of simulation study including generation of values for parameters and initial conditions.
+-   Replicability of studies when code is made available to reviewers and other researchers even if they do not have access to the commercial software.
+-   Reproducibility of results by being able to re-run the analyses through scripts.
+-   Efficiency of resources since long simulation runs can be initiated as a batch process on the HPC versus tying up a local computer.
+
+There are many ways to implement a policy analysis on the HPC including running Stella Simulator directly from R using the `system()` command, the approach presented here is optimized to make the best use of HPC resources. For example, running Stella simulator within an R environment by calling the `system()` creates a new environment in R that often takes longer than the actual simulation. Hence the approach taken here uses Bash and AWK scrits to manage the overall simulation that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC.
