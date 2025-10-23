@@ -1,13 +1,13 @@
 # Policy Analysis
 
-This set of exercises from [SD4DS](https://github.com/CBSDLab/SD4DS) provides an introduction to designing and running a policy analysis on the High Performance Computing (HPC) cluster using Stella Simulator. Conducting a policy analysis allows a modeler to test different intervention places in the model and compare their impact on the desired outcome. This exercise will walk through building the intervention model structure in a Stella model, running the simulation, and comparing the interventions as a graph plot in R. 
+This set of exercises from [SD4DS](https://github.com/CBSDLab/SD4DS) provides an introduction to designing and running a policy analysis on the High Performance Computing (HPC) cluster using Stella Simulator. Conducting a policy analysis allows a modeler to test different intervention places in the model and compare their impact on the desired outcome. This exercise will walk through building the intervention model structure in a Stella model, running the simulation, and measuring the outcome after different interventions as a graph plot in R. 
 
-For more details on why we're doing this on the HPC as opposed to standard software pacakages (e.g. Stella Architect, Vensim) through the user interface, as well as the rationale for the coding languages chosen in this exercise, please read the Deep Dive section at the end of this exercise.
+For more details on why we're doing this on the HPC as opposed to standard software pacakages (e.g. Stella Architect, Vensim) through the user interface, as well as the rationale for the coding languages chosen in this exercise, please read the [Deep Dive](https://github.com/CBSDLab/SD4DS-policy-analysis/blob/Callie-dev/README.md#deep-dive) section at the end of this exercise.
 
 
 ## Overview
 
-To implement a policy analysis on the HPC, we present an approach that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. For more details on this approach, please read the Deep Dive section at the end of this exercise. 
+To implement a policy analysis on the HPC, we present an approach that minimizes programming needed to set up and efficiently run a simulation as a batch job on the HPC. For more details on this approach, please read the [Deep Dive](https://github.com/CBSDLab/SD4DS-policy-analysis/blob/Callie-dev/README.md#deep-dive) section at the end of this exercise. 
 
 Defining the policy outcome(s) of interest is a key step in conducting a policy analysis. All variables' values are available in simulation models, so there are a lot more options for outcomes in a simulation study than available in the real world. This means we have the opportunity to explore many different ways defining a policy outcome in a simulation study. For example, one could define an outcome of interest by simply maximizing (or minimizing) the value of some variable at the end of a simulation run, but other options include defining the improvement of some variable relative to the present time, defining outcomes as a ratio of two variables, the cumulative value as opposed to the final value, or some other set of multivariate outcome measures. One is really only constrained by the variables in a model and one's imagination.
 
