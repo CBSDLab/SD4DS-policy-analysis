@@ -119,6 +119,8 @@ After setting the Parms.csv file, a dynamic link for exporting results needs to 
 
 Once the basic dynamic links have been set up for importing and exporting data, we need to set up the study.csv file. This is the file that essentially defines the simulation study for our policy analysis, i.e., the parameter values and switches/timings of policies we want to turn on and off. If we have multiple studies, each study should have be uniquely named, e.g., Study1.csv, Study2.csv, etc. or Univariate_study.csv, Multivariate_study.csv, etc.
 
+This step 4 is summarized in the Create_study1.R script, but we will walk through the steps that created this script. 
+
 The simulate_study.awk script uses the first row or header row of the study.csv file to identify the variable names for the simulation study, and it is ***critical*** that these match the variable names in the Stella model ***exactly*** because Stella will otherwise ignore the variables. The best way to ensure that the variable names are the same is create an import template in Stella by clicking the "Make Template" in the Model Imports form (Figure 4). Select the column (vertical) organization of variables, which generates a header row of all the variables in a model (Figure 6). This will create a Template.csv file that can be edited.
 
 **Figure 6.** Creating a template for importing variables
@@ -170,7 +172,7 @@ The last step is writing the Study1.csv files with our results.
 write_csv(study1_df,"study1.csv")
 ```
 
-These steps are summarized in the Create_study1.R script. Once we have created the Study1.csv file, we should be able to view and see the results where one can see each row has a different switch activated (see Figure 6). We are now ready to run the simulation model.
+Once we have created the Study1.csv file, we should be able to view and see the results where one can see each row has a different switch activated (see Figure 6). We are now ready to run the simulation model.
 
 **Figure 6.** Resulting Study1.csv file as viewed in Excel
 
